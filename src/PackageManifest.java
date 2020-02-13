@@ -16,14 +16,16 @@
  */
 
 
-import com.openitvn.format.dds.DDSTexturePack;
-import com.openitvn.format.obj.ObjWorld;
+import com.unimod.format.dds.DDSTexturePack;
+import com.unimod.format.obj.ObjWorld;
 import com.openitvn.unicore.plugin.FileType;
+import com.openitvn.unicore.plugin.PanelLocation;
 import com.openitvn.unicore.plugin.PluginManifest;
+import com.unimod.plugin.panel.TestPanel;
 
 /**
  *
- * @author Thinh Pham <mrlordkaj@gmail.com>
+ * @author Thinh Pham
  */
 public final class PackageManifest extends PluginManifest {
     
@@ -31,20 +33,26 @@ public final class PackageManifest extends PluginManifest {
         // TODO: define your supported file extensions here
         putFileView("DirectDraw Surface", loadIcon("/_dds.png"), FileType.Texture, DDSTexturePack.class, "dds");
         putFileView("Wavefront OBJ",      loadIcon("/_obj.png"), FileType.World,   ObjWorld.class,       "obj");
+        
+        // TODO: define your custom control panel here
+        putControlPanel("Test", PanelLocation.Sidebar, TestPanel.class, true);
     }
 
     @Override
     public String getId() {
-        return "com.openitvn.unimod.codec.generic";
+        // TODO: define package identity here
+        return "com.unimod.generic";
     }
 
     @Override
     public String getName() {
-        return "Unimod Generic Pack";
+        // TODO: define package name here
+        return "Unimod Generic";
     }
 
     @Override
     public String getVersion() {
+        // TODO: define package version here
         return "1.0.0";
     }
 }
