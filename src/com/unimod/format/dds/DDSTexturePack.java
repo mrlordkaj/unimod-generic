@@ -46,6 +46,11 @@ public class DDSTexturePack extends ITexturePack {
     }
     
     @Override
+    public byte[] encode() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
     public Collection<DumpEntry> dump(DataStream ds) {
         return new ArrayList();
     }
