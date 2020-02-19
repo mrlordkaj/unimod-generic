@@ -33,7 +33,7 @@ import java.nio.ByteOrder;
  */
 public class DDSTexture extends ITexture {
     
-    private DDSHeader header; // common header
+    private DXHeader header; // common header
     private DX10Header headerDX10; // extended header for DX10
     private byte[][][] imageBuffer; // byte[imageCount][mipmapCount][]
     
@@ -41,7 +41,7 @@ public class DDSTexture extends ITexture {
     
     public DDSTexture(DataStream ds) {
         // read header
-        header = new DDSHeader(ds);
+        header = new DXHeader(ds);
         if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
             headerDX10 = new DX10Header(ds);
         int imgCount = getFaceCount();
@@ -63,35 +63,59 @@ public class DDSTexture extends ITexture {
     }
     
     @Override
-    public boolean replace(ITexture src) throws UnsupportedOperationException {
+    public byte[] compilePatch(ITexture src) {
         // build header
         // try save as DirectX 10 first
         // when fail, fall back to DirectX legacy
         // if fail again, throw unsupported
         DX10PixelFormat dxgi = DX10PixelFormat.fromFormat(src.getPixelFormat());
         if (dxgi == DX10PixelFormat.DXGI_FORMAT_UNKNOWN) {
-            header = new DDSHeader(src.getWidth(), src.getHeight(), src.getPixelFormat());
+            header = new DXHeader(src.getWidth(), src.getHeight(), src.getPixelFormat());
         } else {
             headerDX10 = new DX10Header();
             headerDX10.dxgiFormat = dxgi;
             headerDX10.resourceDimension = DX10ResourceDimension.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
             headerDX10.arraySize = src.getFaceCount();
-            header = new DDSHeader(src.getWidth(), src.getHeight(), headerDX10);
+            header = new DXHeader(src.getWidth(), src.getHeight(), headerDX10);
         }
         header.setMipMapCount(src.getMipCount());
         header.setCubeMap(src.getCubeMapHeader());
-        // copy image buffer
-        int numImgs = src.isCubeMap() ? src.getFaceCount() : 1;
+        // copy buffer from source
+        int numFaces = src.getFaceCount();
         int numMips = header.getMipMapCount();
-        imageBuffer = new byte[numImgs][numMips][];
-        for (int i = 0; i < numImgs; i++) {
-            for (int j = 0; j < numMips; j++)
+        imageBuffer = new byte[numFaces][numMips][];
+        for (int i = 0; i < numFaces; i++) {
+            for (int j = 0; j < numMips; j++) {
                 imageBuffer[i][j] = src.getImageBuffer(i, j);
+            }
         }
-        return true;
+        
+        // allocate file size
+        int imgCount = getFaceCount();
+        int fileSize = header.dwSize + 4;
+        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
+            fileSize += 20;
+        for (int i = 0; i < imgCount; i++) {
+            for (int j = 0; j < header.getMipMapCount(); j++) {
+                fileSize += imageBuffer[i][j].length;
+            }
+        }
+        ByteBuffer bb = ByteBuffer.allocate(fileSize).order(ByteOrder.LITTLE_ENDIAN);
+        // writeTo header
+        header.writeTo(bb);
+        // writeTo DX10 extended header
+        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
+            headerDX10.writeTo(bb);
+        // writeTo image buffer
+        for (int i = 0; i < imgCount; i++) {
+            for (int j = 0; j < header.getMipMapCount(); j++) {
+                bb.put(imageBuffer[i][j]);
+            }
+        }
+        return bb.array();
     }
     
-    //<editor-fold desc="Generic Texture Properties" defaultstate="collapsed">
+    //<editor-fold desc="Texture Properties" defaultstate="collapsed">
     @Override
     public int getWidth() {
         return header.dwWidth;
@@ -126,42 +150,9 @@ public class DDSTexture extends ITexture {
     }
     //</editor-fold>
     
-    //<editor-fold desc="File Data Management" defaultstate="collapsed">
-    @Override
-    public byte[] compilePatch(ITexture customTexture) {
-        // allocate file size
-        int imgCount = getFaceCount();
-        int fileSize = header.dwSize + 4;
-        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
-            fileSize += 20;
-        for (int i = 0; i < imgCount; i++) {
-            for (int j = 0; j < header.getMipMapCount(); j++)
-                fileSize += imageBuffer[i][j].length;
-        }
-        ByteBuffer bb = ByteBuffer.allocate(fileSize).order(ByteOrder.LITTLE_ENDIAN);
-        // writeTo header
-        header.writeTo(bb);
-        // writeTo DX10 extended header
-        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
-            headerDX10.writeTo(bb);
-        // writeTo image buffer
-        for (int i = 0; i < imgCount; i++) {
-            for (int j = 0; j < header.getMipMapCount(); j++)
-                bb.put(imageBuffer[i][j]);
-        }
-        return bb.array();
-    }
-
     @Override
     public byte[] getImageBuffer(int face, int mip) {
         return imageBuffer[face][mip];
-    }
-    //</editor-fold>
-    
-    //<editor-fold desc="Encode and Decode Image" defaultstate="collapsed">
-    @Override
-    public byte[] encodeImage(IRaster src, int face) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
@@ -170,5 +161,4 @@ public class DDSTexture extends ITexture {
         ByteBuffer bb = ByteBuffer.wrap(imageBuffer[face][mip]).order(ByteOrder.LITTLE_ENDIAN);
         TextureHelper.decodeImage(dst, imgSize, getPixelFormat(), bb);
     }
-    //</editor-fold>
 }

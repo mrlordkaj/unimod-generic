@@ -28,7 +28,7 @@ import java.nio.ByteOrder;
  * @author Thinh Pham
  */
 
-public class DDSHeader {
+public class DXHeader {
     
     // dwFlags
     protected static final int DDS_HEADER_FLAGS_TEXTURE    = 0x001007; // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
@@ -77,7 +77,7 @@ public class DDSHeader {
     private int dwCaps4;
     private int dwReserved2;
     
-    protected DDSHeader(int width, int height, IPixelFormat fmt) throws UnsupportedOperationException {
+    protected DXHeader(int width, int height, IPixelFormat fmt) throws UnsupportedOperationException {
         this.dwHeight = height;
         this.dwWidth = width;
         this.ddspf = DDSPixelFormat.fromFormat(fmt);
@@ -87,14 +87,14 @@ public class DDSHeader {
             throw new UnsupportedOperationException(String.format("Unable convert %1$s to DDSPixelFormat", fmt));
     }
     
-    protected DDSHeader(int width, int height, DX10Header headerDX10) throws UnsupportedOperationException {
+    protected DXHeader(int width, int height, DX10Header headerDX10) throws UnsupportedOperationException {
         this.dwHeight = height;
         this.dwWidth = width;
         this.ddspf = DDSPixelFormat.D3DFMT_DX10;
         this.dwPitchOrLinearSize = headerDX10.dxgiFormat.format.computePitchOrLinearSize(width);
     }
     
-    protected DDSHeader(DataStream ds) {
+    protected DXHeader(DataStream ds) {
         ds.position(8); //skip magic, dwSize
         dwFlags = ds.getInt();
         dwHeight = ds.getInt();

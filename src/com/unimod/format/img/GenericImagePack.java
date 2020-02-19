@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Thinh Pham
+ * Copyright (C) 2020 Thinh Pham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,32 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.unimod.format.dds;
+package com.unimod.format.img;
 
 import com.openitvn.unicore.data.DataStream;
-import com.openitvn.maintain.DumpEntry;
 import com.openitvn.unicore.world.resource.ITexturePack;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /**
  *
  * @author Thinh Pham
  */
-public class DDSTexturePack extends ITexturePack {
-    
+public class GenericImagePack extends ITexturePack {
+
     @Override
     public void decode(DataStream ds) {
-        textures.add(new DDSTexture(ds));
+        try {
+            BufferedImage img = ImageIO.read(ds);
+            textures.add(new GenericImage(img));
+        } catch (IOException ex) { }
+    }
+
+    @Override
+    public byte[] encode() {
+        return new byte[0];
     }
     
-    @Override
-    public byte[] encode() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public Collection<DumpEntry> dump(DataStream ds) {
-        return new ArrayList();
-    }
 }

@@ -27,44 +27,44 @@ import java.nio.ByteOrder;
  * @author Thinh Pham
  */
 public enum DDSPixelFormat {
-    D3DFMT_A8B8G8R8         (IPixelFormat.D3DFMT_A8B8G8R8,       DDSHeader.DDS_RGBA,      32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000),
-    D3DFMT_G16R16           (IPixelFormat.D3DFMT_G16R16,         DDSHeader.DDS_RGB,       32, 0x0000ffff, 0xffff0000, 0x00000000, 0x00000000),
-    D3DFMT_A2B10G10R10      (IPixelFormat.D3DFMT_A2B10G10R10,    DDSHeader.DDS_RGBA,      32, 0x000003ff, 0x000ffc00, 0x3ff00000, 0x00000000),
-    D3DFMT_A1R5G5B5         (IPixelFormat.D3DFMT_A1R5G5B5,       DDSHeader.DDS_RGBA,      16, 0x7c00, 0x03e0, 0x001f, 0x8000),
-    D3DFMT_R5G6B5           (IPixelFormat.D3DFMT_R5G6B5,         DDSHeader.DDS_RGB,       16, 0xf800, 0x07e0, 0x001f, 0x0000),
-    D3DFMT_A8               (IPixelFormat.D3DFMT_A8,             DDSHeader.DDS_ALPHA,      8, 0x00, 0x00, 0x00, 0xff),
-    D3DFMT_A8R8G8B8         (IPixelFormat.D3DFMT_A8R8G8B8,       DDSHeader.DDS_RGBA,      32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000),
-    D3DFMT_X8R8G8B8         (IPixelFormat.D3DFMT_X8R8G8B8,       DDSHeader.DDS_RGB,       32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000),
-    D3DFMT_X8B8G8R8         (IPixelFormat.D3DFMT_X8B8G8R8,       DDSHeader.DDS_RGB,       32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0x00000000),
-    D3DFMT_A2R10G10B10      (IPixelFormat.D3DFMT_A2R10G10B10,    DDSHeader.DDS_RGBA,      32, 0x3ff00000, 0x000ffc00, 0x000003ff, 0xc0000000),
-    D3DFMT_R8G8B8           (IPixelFormat.D3DFMT_R8G8B8,         DDSHeader.DDS_RGB,       24, 0xff0000, 0x00ff00, 0x0000ff, 0x000000),
-    D3DFMT_X1R5G5B5         (IPixelFormat.D3DFMT_X1R5G5B5,       DDSHeader.DDS_RGBA,      16, 0x7c00, 0x03e0, 0x001f, 0x0000),
-    D3DFMT_A4R4G4B4         (IPixelFormat.D3DFMT_A4R4G4B4,       DDSHeader.DDS_RGBA,      16, 0x0f00, 0x00f0, 0x000f, 0xf000),
-    D3DFMT_X4R4G4B4         (IPixelFormat.D3DFMT_X4R4G4B4,       DDSHeader.DDS_RGB,       16, 0x0f00, 0x00f0, 0x000f, 0x0000),
-    D3DFMT_A8R3G3B2         (IPixelFormat.D3DFMT_A8R3G3B2,       DDSHeader.DDS_RGBA,      16, 0x00e0, 0x001c, 0x0003, 0xff00),
-    D3DFMT_A8L8             (IPixelFormat.D3DFMT_A8L8,           DDSHeader.DDS_LUMINANCE, 16, 0x00ff, 0x0000, 0x0000, 0xff00),
-    D3DFMT_L16              (IPixelFormat.D3DFMT_L16,            DDSHeader.DDS_LUMINANCE, 16, 0xffff, 0x0000, 0x0000, 0x0000),
-    D3DFMT_L8               (IPixelFormat.D3DFMT_L8,             DDSHeader.DDS_LUMINANCE,  8, 0xff, 0x00, 0x00, 0x00),
-    D3DFMT_A4L4             (IPixelFormat.D3DFMT_A4L4,           DDSHeader.DDS_LUMINANCE,  8, 0x0f, 0x00, 0x00, 0xf0),
-    D3DFMT_DXT1             (IPixelFormat.D3DFMT_DXT1,           DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','1')),
-    D3DFMT_DXT2             (IPixelFormat.D3DFMT_DXT2,           DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','2')),
-    D3DFMT_DXT3             (IPixelFormat.D3DFMT_DXT3,           DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','3')),
-    D3DFMT_DXT4             (IPixelFormat.D3DFMT_DXT4,           DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','4')),
-    D3DFMT_DXT5             (IPixelFormat.D3DFMT_DXT5,           DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','5')),
-    D3DFMT_R8G8_B8G8        (IPixelFormat.D3DFMT_R8G8_B8G8,      DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('R','G','B','G')),
-    D3DFMT_G8R8_G8B8        (IPixelFormat.D3DFMT_G8R8_G8B8,      DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('G','R','G','B')),
-    D3DFMT_A16B16G16R16     (IPixelFormat.D3DFMT_A16B16G16R16,   DDSHeader.DDS_FOURCC, 36),
-    D3DFMT_Q16W16V16U16     (IPixelFormat.D3DFMT_Q16W16V16U16,   DDSHeader.DDS_FOURCC, 110),
-    D3DFMT_R16F             (IPixelFormat.D3DFMT_R16F,           DDSHeader.DDS_FOURCC, 111),
-    D3DFMT_G16R16F          (IPixelFormat.D3DFMT_G16R16F,        DDSHeader.DDS_FOURCC, 112),
-    D3DFMT_A16B16G16R16F    (IPixelFormat.D3DFMT_A16B16G16R16F,  DDSHeader.DDS_FOURCC, 113),
-    D3DFMT_R32F             (IPixelFormat.D3DFMT_R32F,           DDSHeader.DDS_FOURCC, 114),
-    D3DFMT_G32R32F          (IPixelFormat.D3DFMT_G32R32F,        DDSHeader.DDS_FOURCC, 115),
-    D3DFMT_A32B32G32R32F    (IPixelFormat.D3DFMT_A32B32G32R32F,  DDSHeader.DDS_FOURCC, 116),
-    D3DFMT_UYVY             (IPixelFormat.D3DFMT_UYVY,           DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('U','Y','V','Y')),
-    D3DFMT_YUY2             (IPixelFormat.D3DFMT_YUY2,           DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('Y','U','Y','2')),
-    D3DFMT_CxV8U8           (IPixelFormat.D3DFMT_CxV8U8,         DDSHeader.DDS_FOURCC, 117),
-    D3DFMT_DX10             (IPixelFormat.D3DFMT_DX10,           DDSHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','1','0')),
+    D3DFMT_A8B8G8R8         (IPixelFormat.D3DFMT_A8B8G8R8,       DXHeader.DDS_RGBA,      32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000),
+    D3DFMT_G16R16           (IPixelFormat.D3DFMT_G16R16,         DXHeader.DDS_RGB,       32, 0x0000ffff, 0xffff0000, 0x00000000, 0x00000000),
+    D3DFMT_A2B10G10R10      (IPixelFormat.D3DFMT_A2B10G10R10,    DXHeader.DDS_RGBA,      32, 0x000003ff, 0x000ffc00, 0x3ff00000, 0x00000000),
+    D3DFMT_A1R5G5B5         (IPixelFormat.D3DFMT_A1R5G5B5,       DXHeader.DDS_RGBA,      16, 0x7c00, 0x03e0, 0x001f, 0x8000),
+    D3DFMT_R5G6B5           (IPixelFormat.D3DFMT_R5G6B5,         DXHeader.DDS_RGB,       16, 0xf800, 0x07e0, 0x001f, 0x0000),
+    D3DFMT_A8               (IPixelFormat.D3DFMT_A8,             DXHeader.DDS_ALPHA,      8, 0x00, 0x00, 0x00, 0xff),
+    D3DFMT_A8R8G8B8         (IPixelFormat.D3DFMT_A8R8G8B8,       DXHeader.DDS_RGBA,      32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000),
+    D3DFMT_X8R8G8B8         (IPixelFormat.D3DFMT_X8R8G8B8,       DXHeader.DDS_RGB,       32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000),
+    D3DFMT_X8B8G8R8         (IPixelFormat.D3DFMT_X8B8G8R8,       DXHeader.DDS_RGB,       32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0x00000000),
+    D3DFMT_A2R10G10B10      (IPixelFormat.D3DFMT_A2R10G10B10,    DXHeader.DDS_RGBA,      32, 0x3ff00000, 0x000ffc00, 0x000003ff, 0xc0000000),
+    D3DFMT_R8G8B8           (IPixelFormat.D3DFMT_R8G8B8,         DXHeader.DDS_RGB,       24, 0xff0000, 0x00ff00, 0x0000ff, 0x000000),
+    D3DFMT_X1R5G5B5         (IPixelFormat.D3DFMT_X1R5G5B5,       DXHeader.DDS_RGBA,      16, 0x7c00, 0x03e0, 0x001f, 0x0000),
+    D3DFMT_A4R4G4B4         (IPixelFormat.D3DFMT_A4R4G4B4,       DXHeader.DDS_RGBA,      16, 0x0f00, 0x00f0, 0x000f, 0xf000),
+    D3DFMT_X4R4G4B4         (IPixelFormat.D3DFMT_X4R4G4B4,       DXHeader.DDS_RGB,       16, 0x0f00, 0x00f0, 0x000f, 0x0000),
+    D3DFMT_A8R3G3B2         (IPixelFormat.D3DFMT_A8R3G3B2,       DXHeader.DDS_RGBA,      16, 0x00e0, 0x001c, 0x0003, 0xff00),
+    D3DFMT_A8L8             (IPixelFormat.D3DFMT_A8L8,           DXHeader.DDS_LUMINANCE, 16, 0x00ff, 0x0000, 0x0000, 0xff00),
+    D3DFMT_L16              (IPixelFormat.D3DFMT_L16,            DXHeader.DDS_LUMINANCE, 16, 0xffff, 0x0000, 0x0000, 0x0000),
+    D3DFMT_L8               (IPixelFormat.D3DFMT_L8,             DXHeader.DDS_LUMINANCE,  8, 0xff, 0x00, 0x00, 0x00),
+    D3DFMT_A4L4             (IPixelFormat.D3DFMT_A4L4,           DXHeader.DDS_LUMINANCE,  8, 0x0f, 0x00, 0x00, 0xf0),
+    D3DFMT_DXT1             (IPixelFormat.D3DFMT_DXT1,           DXHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','1')),
+    D3DFMT_DXT2             (IPixelFormat.D3DFMT_DXT2,           DXHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','2')),
+    D3DFMT_DXT3             (IPixelFormat.D3DFMT_DXT3,           DXHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','3')),
+    D3DFMT_DXT4             (IPixelFormat.D3DFMT_DXT4,           DXHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','4')),
+    D3DFMT_DXT5             (IPixelFormat.D3DFMT_DXT5,           DXHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','T','5')),
+    D3DFMT_R8G8_B8G8        (IPixelFormat.D3DFMT_R8G8_B8G8,      DXHeader.DDS_FOURCC, StringHelper.makeFourCC('R','G','B','G')),
+    D3DFMT_G8R8_G8B8        (IPixelFormat.D3DFMT_G8R8_G8B8,      DXHeader.DDS_FOURCC, StringHelper.makeFourCC('G','R','G','B')),
+    D3DFMT_A16B16G16R16     (IPixelFormat.D3DFMT_A16B16G16R16,   DXHeader.DDS_FOURCC, 36),
+    D3DFMT_Q16W16V16U16     (IPixelFormat.D3DFMT_Q16W16V16U16,   DXHeader.DDS_FOURCC, 110),
+    D3DFMT_R16F             (IPixelFormat.D3DFMT_R16F,           DXHeader.DDS_FOURCC, 111),
+    D3DFMT_G16R16F          (IPixelFormat.D3DFMT_G16R16F,        DXHeader.DDS_FOURCC, 112),
+    D3DFMT_A16B16G16R16F    (IPixelFormat.D3DFMT_A16B16G16R16F,  DXHeader.DDS_FOURCC, 113),
+    D3DFMT_R32F             (IPixelFormat.D3DFMT_R32F,           DXHeader.DDS_FOURCC, 114),
+    D3DFMT_G32R32F          (IPixelFormat.D3DFMT_G32R32F,        DXHeader.DDS_FOURCC, 115),
+    D3DFMT_A32B32G32R32F    (IPixelFormat.D3DFMT_A32B32G32R32F,  DXHeader.DDS_FOURCC, 116),
+    D3DFMT_UYVY             (IPixelFormat.D3DFMT_UYVY,           DXHeader.DDS_FOURCC, StringHelper.makeFourCC('U','Y','V','Y')),
+    D3DFMT_YUY2             (IPixelFormat.D3DFMT_YUY2,           DXHeader.DDS_FOURCC, StringHelper.makeFourCC('Y','U','Y','2')),
+    D3DFMT_CxV8U8           (IPixelFormat.D3DFMT_CxV8U8,         DXHeader.DDS_FOURCC, 117),
+    D3DFMT_DX10             (IPixelFormat.D3DFMT_DX10,           DXHeader.DDS_FOURCC, StringHelper.makeFourCC('D','X','1','0')),
     D3DFMT_UNKNOW;
     
     protected final IPixelFormat format;
@@ -134,30 +134,30 @@ public enum DDSPixelFormat {
         int dwABitMask = ds.getInt();
         
         switch (dwFlags) {
-            case DDSHeader.DDS_FOURCC:
+            case DXHeader.DDS_FOURCC:
                 for (DDSPixelFormat fmt : values()) {
                     if (dwFourCC == fmt.dwFourCC)
                         return fmt;
                 }
                 break;
             
-            case DDSHeader.DDS_RGB:
-            case DDSHeader.DDS_RGBA:
+            case DXHeader.DDS_RGB:
+            case DXHeader.DDS_RGBA:
                 for (DDSPixelFormat fmt : values()) {
                     if (dwRGBBitCount == fmt.dwRGBBitCount && dwRBitMask == fmt.dwRBitMask && dwGBitMask == fmt.dwGBitMask && dwBBitMask == fmt.dwBBitMask && dwABitMask == fmt.dwABitMask)
                         return fmt;
                 }
                 break;
                 
-            case DDSHeader.DDS_ALPHA:
+            case DXHeader.DDS_ALPHA:
                 for (DDSPixelFormat fmt : values()) {
                     if (dwRGBBitCount == fmt.dwRGBBitCount && dwABitMask == fmt.dwABitMask)
                         return fmt;
                 }
                 break;
                 
-            case DDSHeader.DDS_LUMINANCE:
-            case DDSHeader.DDS_LUMINANCEA:
+            case DXHeader.DDS_LUMINANCE:
+            case DXHeader.DDS_LUMINANCEA:
                 for (DDSPixelFormat fmt : values()) {
                     if (dwRGBBitCount == fmt.dwRGBBitCount && dwRBitMask == fmt.dwRBitMask && dwABitMask == fmt.dwABitMask)
                         return fmt;
