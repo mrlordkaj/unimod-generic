@@ -33,6 +33,7 @@ public final class PackageManifest extends PluginManifest {
         // TODO: define your supported file extensions here
         putFileView("DirectDraw Surface", loadIcon("/_dds.png"), FileType.Texture, DDSTexturePack.class, "dds");
         putFileView("Wavefront OBJ",      loadIcon("/_obj.png"), FileType.World,   ObjWorld.class,       "obj");
+//        putFileView("Portable Network Graphics", loadIcon("/_png.png"), FileType.Texture,    ObjWorld.class, "png");
         
         // TODO: define your custom control panel here
         putControlPanel("Test", PanelLocation.Sidebar, TestPanel.class, true);
