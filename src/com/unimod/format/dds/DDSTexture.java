@@ -16,6 +16,7 @@
  */
 package com.unimod.format.dds;
 
+import com.badlogic.gdx.graphics.GL20;
 import com.openitvn.unicore.raster.IPixelFormat;
 import com.openitvn.unicore.raster.ICubeMapHeader;
 import com.openitvn.unicore.raster.TextureHelper;
@@ -115,7 +116,18 @@ public class DDSTexture extends ITexture {
         return bb.array();
     }
     
-    //<editor-fold desc="Texture Properties" defaultstate="collapsed">
+    @Override
+    public byte[] getImageBuffer(int face, int mip) {
+        return imageBuffer[face][mip];
+    }
+    
+    @Override
+    public void decodeImage(IRaster dst, int face, int mip) {
+        Dimension imgSize = TextureHelper.calcMipMapSize(header.dwWidth, header.dwHeight, mip);
+        ByteBuffer bb = ByteBuffer.wrap(imageBuffer[face][mip]).order(ByteOrder.LITTLE_ENDIAN);
+        TextureHelper.decodeImage(dst, imgSize, getPixelFormat(), bb);
+    }
+    
     @Override
     public int getWidth() {
         return header.dwWidth;
@@ -137,6 +149,16 @@ public class DDSTexture extends ITexture {
     }
     
     @Override
+    public int getUWrap() {
+        return GL20.GL_CLAMP_TO_EDGE;
+    }
+
+    @Override
+    public int getVWrap() {
+        return GL20.GL_CLAMP_TO_EDGE;
+    }
+    
+    @Override
     public ICubeMapHeader getCubeMapHeader() {
         return header.getCubeMap();
     }
@@ -147,18 +169,5 @@ public class DDSTexture extends ITexture {
             return headerDX10.dxgiFormat.format;
         else
             return header.ddspf.format;
-    }
-    //</editor-fold>
-    
-    @Override
-    public byte[] getImageBuffer(int face, int mip) {
-        return imageBuffer[face][mip];
-    }
-    
-    @Override
-    public void decodeImage(IRaster dst, int face, int mip) {
-        Dimension imgSize = TextureHelper.calcMipMapSize(header.dwWidth, header.dwHeight, mip);
-        ByteBuffer bb = ByteBuffer.wrap(imageBuffer[face][mip]).order(ByteOrder.LITTLE_ENDIAN);
-        TextureHelper.decodeImage(dst, imgSize, getPixelFormat(), bb);
     }
 }

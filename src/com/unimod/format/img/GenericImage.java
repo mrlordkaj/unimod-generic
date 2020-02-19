@@ -16,6 +16,7 @@
  */
 package com.unimod.format.img;
 
+import com.badlogic.gdx.graphics.GL20;
 import com.openitvn.unicore.raster.ICubeMapHeader;
 import com.openitvn.unicore.raster.IPixelFormat;
 import com.openitvn.unicore.raster.IRaster;
@@ -53,6 +54,22 @@ public class GenericImage extends ITexture {
     }
     
     @Override
+    public byte[] compilePatch(ITexture srcImg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public byte[] getImageBuffer(int faceId, int mipLevel) {
+        return data;
+    }
+
+    @Override
+    public void decodeImage(IRaster dstImg, int faceId, int mipLevel) {
+        ByteBuffer bb = ByteBuffer.wrap(data);
+        TextureHelper.decodeImage(dstImg, width, height, IPixelFormat.D3DFMT_A8B8G8R8, bb);
+    }
+    
+    @Override
     public int getWidth() {
         return width;
     }
@@ -71,6 +88,16 @@ public class GenericImage extends ITexture {
     public int getMipCount() {
         return 1;
     }
+    
+    @Override
+    public int getUWrap() {
+        return GL20.GL_CLAMP_TO_EDGE;
+    }
+
+    @Override
+    public int getVWrap() {
+        return GL20.GL_CLAMP_TO_EDGE;
+    }
 
     @Override
     public ICubeMapHeader getCubeMapHeader() {
@@ -80,21 +107,5 @@ public class GenericImage extends ITexture {
     @Override
     public IPixelFormat getPixelFormat() {
         return IPixelFormat.D3DFMT_A8B8G8R8;
-    }
-
-    @Override
-    public byte[] compilePatch(ITexture srcImg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public byte[] getImageBuffer(int faceId, int mipLevel) {
-        return data;
-    }
-
-    @Override
-    public void decodeImage(IRaster dstImg, int faceId, int mipLevel) {
-        ByteBuffer bb = ByteBuffer.wrap(data);
-        TextureHelper.decodeImage(dstImg, width, height, IPixelFormat.D3DFMT_A8B8G8R8, bb);
     }
 }
