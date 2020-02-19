@@ -148,12 +148,12 @@ public class DDSHeader {
     protected void setCubeMap(ICubeMapHeader cubeMap) {
         if (cubeMap.getFaceCount() > 0) {
             dwCaps = DDS_SURFACE_FLAGS_CUBEMAP;
-            if (cubeMap.hasPositiveX) dwCaps2 |= DDS_CUBEMAP_POSITIVEX;
-            if (cubeMap.hasNegativeX) dwCaps2 |= DDS_CUBEMAP_NEGATIVEX;
-            if (cubeMap.hasPositiveY) dwCaps2 |= DDS_CUBEMAP_POSITIVEY;
-            if (cubeMap.hasNegativeY) dwCaps2 |= DDS_CUBEMAP_NEGATIVEY;
-            if (cubeMap.hasPositiveZ) dwCaps2 |= DDS_CUBEMAP_POSITIVEZ;
-            if (cubeMap.hasNegativeZ) dwCaps2 |= DDS_CUBEMAP_NEGATIVEZ;
+            if (cubeMap.hasPX) dwCaps2 |= DDS_CUBEMAP_POSITIVEX;
+            if (cubeMap.hasNX) dwCaps2 |= DDS_CUBEMAP_NEGATIVEX;
+            if (cubeMap.hasPY) dwCaps2 |= DDS_CUBEMAP_POSITIVEY;
+            if (cubeMap.hasNY) dwCaps2 |= DDS_CUBEMAP_NEGATIVEY;
+            if (cubeMap.hasPZ) dwCaps2 |= DDS_CUBEMAP_POSITIVEZ;
+            if (cubeMap.hasNZ) dwCaps2 |= DDS_CUBEMAP_NEGATIVEZ;
         }
     }
     
@@ -164,12 +164,12 @@ public class DDSHeader {
     protected ICubeMapHeader getCubeMap() {
         ICubeMapHeader cm = new ICubeMapHeader();
         if (isCubeMap()) {
-            cm.hasPositiveX = (dwCaps2 & DDS_CUBEMAP_POSITIVEX) != 0;
-            cm.hasPositiveY = (dwCaps2 & DDS_CUBEMAP_POSITIVEY) != 0;
-            cm.hasPositiveZ = (dwCaps2 & DDS_CUBEMAP_POSITIVEZ) != 0;
-            cm.hasNegativeX = (dwCaps2 & DDS_CUBEMAP_NEGATIVEX) != 0;
-            cm.hasNegativeY = (dwCaps2 & DDS_CUBEMAP_NEGATIVEY) != 0;
-            cm.hasNegativeZ = (dwCaps2 & DDS_CUBEMAP_NEGATIVEZ) != 0;
+            cm.hasPX = (dwCaps2 & DDS_CUBEMAP_POSITIVEX) != 0;
+            cm.hasPY = (dwCaps2 & DDS_CUBEMAP_POSITIVEY) != 0;
+            cm.hasPZ = (dwCaps2 & DDS_CUBEMAP_POSITIVEZ) != 0;
+            cm.hasNX = (dwCaps2 & DDS_CUBEMAP_NEGATIVEX) != 0;
+            cm.hasNY = (dwCaps2 & DDS_CUBEMAP_NEGATIVEY) != 0;
+            cm.hasNZ = (dwCaps2 & DDS_CUBEMAP_NEGATIVEZ) != 0;
         }
         return cm;
     }

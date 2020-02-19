@@ -128,7 +128,7 @@ public class DDSTexture extends ITexture {
     
     //<editor-fold desc="File Data Management" defaultstate="collapsed">
     @Override
-    public byte[] unwrap() {
+    public byte[] compilePatch(ITexture customTexture) {
         // allocate file size
         int imgCount = getFaceCount();
         int fileSize = header.dwSize + 4;
@@ -160,7 +160,7 @@ public class DDSTexture extends ITexture {
     
     //<editor-fold desc="Encode and Decode Image" defaultstate="collapsed">
     @Override
-    public byte[] encodeImage(IRaster src, IPixelFormat fmt) {
+    public byte[] encodeImage(IRaster src, int face) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

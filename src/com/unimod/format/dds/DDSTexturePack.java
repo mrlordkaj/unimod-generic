@@ -18,7 +18,6 @@ package com.unimod.format.dds;
 
 import com.openitvn.unicore.data.DataStream;
 import com.openitvn.maintain.DumpEntry;
-import com.openitvn.unicore.world.resource.ITexture;
 import com.openitvn.unicore.world.resource.ITexturePack;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +33,7 @@ public class DDSTexturePack extends ITexturePack {
         try {
             DDSTexture tex = new DDSTexture();
             tex.replace(src.textures.get(0));
-            addTexture(tex);
+            textures.add(tex);
         } catch(IndexOutOfBoundsException ex) {
             throw new UnsupportedOperationException("Can't copy from empty source file.");
         }
@@ -42,7 +41,7 @@ public class DDSTexturePack extends ITexturePack {
     
     @Override
     public void decode(DataStream ds) {
-        super.addTexture(new DDSTexture(ds));
+        textures.add(new DDSTexture(ds));
     }
     
     @Override
@@ -53,18 +52,5 @@ public class DDSTexturePack extends ITexturePack {
     @Override
     public Collection<DumpEntry> dump(DataStream ds) {
         return new ArrayList();
-    }
-
-    @Override
-    public byte[] unwrap() {
-        return textures.get(0).unwrap();
-    }
-    
-    @Override
-    public void addTexture(ITexture tex) {
-        if (textures.size() > 0)
-            throw new UnsupportedOperationException("DDS Texture format does not support array operations.");
-        else
-            super.addTexture(tex);
     }
 }
