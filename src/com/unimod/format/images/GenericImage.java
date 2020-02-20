@@ -18,8 +18,8 @@ package com.unimod.format.images;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.openitvn.unicore.data.DataStream;
-import com.openitvn.unicore.raster.ICubeMap;
-import com.openitvn.unicore.raster.IPixelFormat;
+import com.openitvn.unicore.world.resource.ICubeMap;
+import com.openitvn.unicore.world.resource.IPixelFormat;
 import com.openitvn.unicore.world.resource.ITexture;
 import com.openitvn.util.FileHelper;
 import java.awt.image.BufferedImage;
@@ -68,7 +68,7 @@ public class GenericImage extends ITexture {
     }
 
     @Override
-    public byte[] getImageBuffer(int faceId, int mipLevel) {
+    public byte[] getImageBuffer(int face, int mipLevel) {
         return imageBuffer;
     }
     

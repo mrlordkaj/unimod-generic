@@ -17,8 +17,8 @@
 package com.unimod.format.dds;
 
 import com.badlogic.gdx.graphics.GL20;
-import com.openitvn.unicore.raster.IPixelFormat;
-import com.openitvn.unicore.raster.ICubeMap;
+import com.openitvn.unicore.world.resource.IPixelFormat;
+import com.openitvn.unicore.world.resource.ICubeMap;
 import com.openitvn.unicore.world.resource.ITexture;
 import com.openitvn.unicore.data.DataStream;
 import com.openitvn.util.FileHelper;
@@ -117,8 +117,8 @@ public class DDSTexture extends ITexture {
     }
     
     @Override
-    public byte[] getImageBuffer(int faceId, int mipLevel) {
-        return imageBuffers[faceId][mipLevel];
+    public byte[] getImageBuffer(int face, int mipLevel) {
+        return imageBuffers[face][mipLevel];
     }
     
     @Override

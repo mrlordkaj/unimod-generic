@@ -16,7 +16,7 @@
  */
 package com.unimod.format.dds;
 
-import com.openitvn.unicore.raster.IPixelFormat;
+import com.openitvn.unicore.world.resource.IPixelFormat;
 
 /**
  *
