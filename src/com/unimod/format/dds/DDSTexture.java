@@ -21,7 +21,6 @@ import com.openitvn.unicore.raster.IPixelFormat;
 import com.openitvn.unicore.raster.ICubeMap;
 import com.openitvn.unicore.world.resource.ITexture;
 import com.openitvn.unicore.data.DataStream;
-import com.openitvn.unicore.raster.IRaster;
 import com.openitvn.util.FileHelper;
 import java.awt.Dimension;
 import java.nio.ByteBuffer;
@@ -35,28 +34,25 @@ public class DDSTexture extends ITexture {
     
     private DXHeader header; // common header
     private DX10Header headerDX10; // extended header for DX10
-    private byte[][][] imageBuffer; // byte[imageCount][mipmapCount][]
-    
-    public DDSTexture() { }
+    private byte[][][] imageBuffers; // byte[imageCount][mipmapCount][]
     
     public DDSTexture(DataStream ds) {
         // read header
         header = new DXHeader(ds);
         if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
             headerDX10 = new DX10Header(ds);
-        int imgCount = getFaceCount();
-        int mipCount = getMipCount();
-        if (getPixelFormat() == IPixelFormat.D3DFMT_UNKNOW ||
-                getPixelFormat() == IPixelFormat.DXGI_FORMAT_UNKNOWN)
-            throw new UnsupportedOperationException("Unable to detect pixel format.");
-        // read image buffer
-        imageBuffer = new byte[imgCount][mipCount][];
-        for (int i = 0; i < imgCount; i++) {
-            for (int j = 0; j < mipCount; j++) {
-                Dimension imageSize = ITexture.computeMipMapSize(header.dwWidth, header.dwHeight, j);
-                int bufferSize = getPixelFormat().computeImageBufferSize(imageSize);
-                imageBuffer[i][j] = new byte[bufferSize];
-                ds.get(imageBuffer[i][j]);
+        int numFaces = getFaceCount();
+        int numMips = getMipCount();
+        IPixelFormat format = getPixelFormat();
+        
+        // copy image buffers
+        imageBuffers = new byte[numFaces][numMips][];
+        for (int i = 0; i < numFaces; i++) {
+            for (int j = 0; j < numMips; j++) {
+                Dimension imageSize = computeMipMapSize(header.dwWidth, header.dwHeight, j);
+                int bufferSize = format.computeImageBufferSize(imageSize);
+                imageBuffers[i][j] = new byte[bufferSize];
+                ds.get(imageBuffers[i][j]);
             }
         }
         setName(FileHelper.getFileName(ds.getLastPath()));
@@ -83,10 +79,10 @@ public class DDSTexture extends ITexture {
         // copy buffer from source
         int numFaces = src.getFaceCount();
         int numMips = header.getMipMapCount();
-        imageBuffer = new byte[numFaces][numMips][];
+        imageBuffers = new byte[numFaces][numMips][];
         for (int i = 0; i < numFaces; i++) {
             for (int j = 0; j < numMips; j++) {
-                imageBuffer[i][j] = src.getImageBuffer(i, j);
+                imageBuffers[i][j] = src.getImageBuffer(i, j);
             }
         }
         
@@ -97,7 +93,7 @@ public class DDSTexture extends ITexture {
             fileSize += 20;
         for (int i = 0; i < imgCount; i++) {
             for (int j = 0; j < header.getMipMapCount(); j++) {
-                fileSize += imageBuffer[i][j].length;
+                fileSize += imageBuffers[i][j].length;
             }
         }
         ByteBuffer bb = ByteBuffer.allocate(fileSize).order(ByteOrder.LITTLE_ENDIAN);
@@ -109,22 +105,20 @@ public class DDSTexture extends ITexture {
         // writeTo image buffer
         for (int i = 0; i < imgCount; i++) {
             for (int j = 0; j < header.getMipMapCount(); j++) {
-                bb.put(imageBuffer[i][j]);
+                bb.put(imageBuffers[i][j]);
             }
         }
         return bb.array();
     }
     
     @Override
-    public byte[] getImageBuffer(int face, int mip) {
-        return imageBuffer[face][mip];
+    public byte[][] getPalette() {
+        return null;
     }
     
     @Override
-    public void decodeImage(IRaster dst, int face, int mip) {
-        Dimension imgSize = ITexture.computeMipMapSize(header.dwWidth, header.dwHeight, mip);
-        ByteBuffer bb = ByteBuffer.wrap(imageBuffer[face][mip]).order(ByteOrder.LITTLE_ENDIAN);
-        getPixelFormat().decodeImage(dst, imgSize, bb);
+    public byte[] getImageBuffer(int faceId, int mipLevel) {
+        return imageBuffers[faceId][mipLevel];
     }
     
     @Override
@@ -164,9 +158,8 @@ public class DDSTexture extends ITexture {
     
     @Override
     public final IPixelFormat getPixelFormat() {
-        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
-            return headerDX10.dxgiFormat.format;
-        else
-            return header.ddspf.format;
+        return (header.ddspf == DDSPixelFormat.D3DFMT_DX10) ?
+                headerDX10.dxgiFormat.format :
+                header.ddspf.format;
     }
 }

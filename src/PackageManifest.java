@@ -21,7 +21,7 @@ import com.unimod.format.obj.ObjWorld;
 import com.openitvn.unicore.plugin.FileType;
 import com.openitvn.unicore.plugin.PanelLocation;
 import com.openitvn.unicore.plugin.PluginManifest;
-import com.unimod.format.png.GenericImagePack;
+import com.unimod.format.images.GenericImagePack;
 import com.unimod.plugin.panel.TestPanel;
 
 /**
@@ -32,10 +32,10 @@ public final class PackageManifest extends PluginManifest {
     
     public PackageManifest() {
         // TODO: define your supported file extensions here
-        putFileView("DirectDraw Surface", loadIcon("/_dds.png"), FileType.Texture, DDSTexturePack.class, "dds");
-        putFileView("Wavefront OBJ", loadIcon("/_obj.png"), FileType.World, ObjWorld.class, "obj");
-        putFileView("Portable Network Graphics", loadIcon("/_png.png"), FileType.Texture, GenericImagePack.class, "png");
-        putFileView("Graphics Interchange Format", loadIcon("/_gif.png"), FileType.Texture, GenericImagePack.class, "gif");
+        putFileView("DirectDraw Surface", FileType.Texture, DDSTexturePack.class, "dds");
+        putFileView("Wavefront OBJ", FileType.World, ObjWorld.class, "obj");
+        putFileView("Portable Network Graphics", FileType.Texture, GenericImagePack.class, "png");
+        putFileView("Graphics Interchange Format", FileType.Texture, GenericImagePack.class, "gif");
         
         // TODO: define your custom control panel here
         putControlPanel("Test", PanelLocation.Sidebar, TestPanel.class, true);

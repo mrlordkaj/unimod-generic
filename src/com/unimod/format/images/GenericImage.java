@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.unimod.format.png;
+package com.unimod.format.images;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.openitvn.unicore.data.DataStream;
 import com.openitvn.unicore.raster.ICubeMap;
 import com.openitvn.unicore.raster.IPixelFormat;
-import com.openitvn.unicore.raster.IRaster;
 import com.openitvn.unicore.world.resource.ITexture;
 import com.openitvn.util.FileHelper;
 import java.awt.image.BufferedImage;
@@ -37,7 +36,7 @@ import javax.imageio.ImageIO;
 public class GenericImage extends ITexture {
     
     private final int width, height;
-    private final byte[] data;
+    private final byte[] imageBuffer;
 
     GenericImage(DataStream ds) throws IOException {
         super(FileHelper.getFileName(ds.getLastPath()));
@@ -50,8 +49,8 @@ public class GenericImage extends ITexture {
         byte[] tmp = ((DataBufferByte)norImg.getRaster().getDataBuffer()).getData();
         // build data
         int numPixels = width * height;
-        data = new byte[numPixels * 4];
-        ByteBuffer rgba = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+        imageBuffer = new byte[numPixels * 4];
+        ByteBuffer rgba = ByteBuffer.wrap(imageBuffer).order(ByteOrder.LITTLE_ENDIAN);
         ByteBuffer abgr = ByteBuffer.wrap(tmp).order(ByteOrder.BIG_ENDIAN);
         for (int i = 0; i < numPixels; i++) {
             rgba.putInt(abgr.getInt());
@@ -62,16 +61,15 @@ public class GenericImage extends ITexture {
     public byte[] compileTexture(ITexture srcImg) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
-    public byte[] getImageBuffer(int faceId, int mipLevel) {
-        return data;
+    public byte[][] getPalette() {
+        return null;
     }
 
     @Override
-    public void decodeImage(IRaster dstImg, int faceId, int mipLevel) {
-        ByteBuffer bb = ByteBuffer.wrap(data);
-        IPixelFormat.D3DFMT_A8B8G8R8.decodeImage(dstImg, width, height, bb);
+    public byte[] getImageBuffer(int faceId, int mipLevel) {
+        return imageBuffer;
     }
     
     @Override
