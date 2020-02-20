@@ -17,7 +17,7 @@
 package com.unimod.format.dds;
 
 import com.openitvn.unicore.raster.IPixelFormat;
-import com.openitvn.unicore.raster.ICubeMapHeader;
+import com.openitvn.unicore.raster.ICubeMap;
 import com.openitvn.util.StringHelper;
 import com.openitvn.unicore.data.DataStream;
 import java.nio.ByteBuffer;
@@ -145,15 +145,15 @@ public class DXHeader {
         return ((dwFlags & DDS_HEADER_FLAGS_MIPMAP) != 0) ? dwMipMapCount : 1;
     }
     
-    protected void setCubeMap(ICubeMapHeader cubeMap) {
+    protected void setCubeMap(ICubeMap cubeMap) {
         if (cubeMap.getFaceCount() > 0) {
             dwCaps = DDS_SURFACE_FLAGS_CUBEMAP;
-            if (cubeMap.hasPX) dwCaps2 |= DDS_CUBEMAP_POSITIVEX;
-            if (cubeMap.hasNX) dwCaps2 |= DDS_CUBEMAP_NEGATIVEX;
-            if (cubeMap.hasPY) dwCaps2 |= DDS_CUBEMAP_POSITIVEY;
-            if (cubeMap.hasNY) dwCaps2 |= DDS_CUBEMAP_NEGATIVEY;
-            if (cubeMap.hasPZ) dwCaps2 |= DDS_CUBEMAP_POSITIVEZ;
-            if (cubeMap.hasNZ) dwCaps2 |= DDS_CUBEMAP_NEGATIVEZ;
+            if (cubeMap.positiveX) dwCaps2 |= DDS_CUBEMAP_POSITIVEX;
+            if (cubeMap.negativeX) dwCaps2 |= DDS_CUBEMAP_NEGATIVEX;
+            if (cubeMap.positiveY) dwCaps2 |= DDS_CUBEMAP_POSITIVEY;
+            if (cubeMap.negativeY) dwCaps2 |= DDS_CUBEMAP_NEGATIVEY;
+            if (cubeMap.positiveZ) dwCaps2 |= DDS_CUBEMAP_POSITIVEZ;
+            if (cubeMap.negativeZ) dwCaps2 |= DDS_CUBEMAP_NEGATIVEZ;
         }
     }
     
@@ -161,15 +161,15 @@ public class DXHeader {
         return (dwCaps == DDS_SURFACE_FLAGS_CUBEMAP);
     }
     
-    protected ICubeMapHeader getCubeMap() {
-        ICubeMapHeader cm = new ICubeMapHeader();
+    protected ICubeMap getCubeMap() {
+        ICubeMap cm = new ICubeMap();
         if (isCubeMap()) {
-            cm.hasPX = (dwCaps2 & DDS_CUBEMAP_POSITIVEX) != 0;
-            cm.hasPY = (dwCaps2 & DDS_CUBEMAP_POSITIVEY) != 0;
-            cm.hasPZ = (dwCaps2 & DDS_CUBEMAP_POSITIVEZ) != 0;
-            cm.hasNX = (dwCaps2 & DDS_CUBEMAP_NEGATIVEX) != 0;
-            cm.hasNY = (dwCaps2 & DDS_CUBEMAP_NEGATIVEY) != 0;
-            cm.hasNZ = (dwCaps2 & DDS_CUBEMAP_NEGATIVEZ) != 0;
+            cm.positiveX = (dwCaps2 & DDS_CUBEMAP_POSITIVEX) != 0;
+            cm.positiveY = (dwCaps2 & DDS_CUBEMAP_POSITIVEY) != 0;
+            cm.positiveZ = (dwCaps2 & DDS_CUBEMAP_POSITIVEZ) != 0;
+            cm.negativeX = (dwCaps2 & DDS_CUBEMAP_NEGATIVEX) != 0;
+            cm.negativeY = (dwCaps2 & DDS_CUBEMAP_NEGATIVEY) != 0;
+            cm.negativeZ = (dwCaps2 & DDS_CUBEMAP_NEGATIVEZ) != 0;
         }
         return cm;
     }

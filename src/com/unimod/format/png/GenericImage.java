@@ -14,18 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.unimod.format.img;
+package com.unimod.format.png;
 
 import com.badlogic.gdx.graphics.GL20;
-import com.openitvn.unicore.raster.ICubeMapHeader;
+import com.openitvn.unicore.data.DataStream;
+import com.openitvn.unicore.raster.ICubeMap;
 import com.openitvn.unicore.raster.IPixelFormat;
 import com.openitvn.unicore.raster.IRaster;
-import com.openitvn.unicore.raster.TextureHelper;
 import com.openitvn.unicore.world.resource.ITexture;
+import com.openitvn.util.FileHelper;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -36,7 +39,9 @@ public class GenericImage extends ITexture {
     private final int width, height;
     private final byte[] data;
 
-    GenericImage(BufferedImage img) {
+    GenericImage(DataStream ds) throws IOException {
+        super(FileHelper.getFileName(ds.getLastPath()));
+        BufferedImage img = ImageIO.read(ds);
         width = img.getWidth();
         height = img.getHeight();
         // make sure ABGR type
@@ -54,7 +59,7 @@ public class GenericImage extends ITexture {
     }
     
     @Override
-    public byte[] compilePatch(ITexture srcImg) {
+    public byte[] compileTexture(ITexture srcImg) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -66,7 +71,7 @@ public class GenericImage extends ITexture {
     @Override
     public void decodeImage(IRaster dstImg, int faceId, int mipLevel) {
         ByteBuffer bb = ByteBuffer.wrap(data);
-        TextureHelper.decodeImage(dstImg, width, height, IPixelFormat.D3DFMT_A8B8G8R8, bb);
+        IPixelFormat.D3DFMT_A8B8G8R8.decodeImage(dstImg, width, height, bb);
     }
     
     @Override
@@ -100,7 +105,7 @@ public class GenericImage extends ITexture {
     }
 
     @Override
-    public ICubeMapHeader getCubeMapHeader() {
+    public ICubeMap getCubeMapHeader() {
         return null;
     }
 

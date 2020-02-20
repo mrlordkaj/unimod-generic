@@ -22,7 +22,7 @@ import java.nio.ByteOrder;
 
 /**
  *
- * @author Thinh Pham <mrlordkaj@gmail.com>
+ * @author Thinh Pham
  */
 public class DX10Header {
     protected DX10PixelFormat dxgiFormat;

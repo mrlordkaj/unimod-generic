@@ -14,13 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.unimod.format.img;
+package com.unimod.format.png;
 
 import com.openitvn.unicore.data.DataStream;
 import com.openitvn.unicore.world.resource.ITexturePack;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -31,9 +29,10 @@ public class GenericImagePack extends ITexturePack {
     @Override
     public void decode(DataStream ds) {
         try {
-            BufferedImage img = ImageIO.read(ds);
-            textures.add(new GenericImage(img));
-        } catch (IOException ex) { }
+            textures.add(new GenericImage(ds));
+        } catch (IOException ex) {
+            throw new UnsupportedOperationException(ex);
+        }
     }
 
     @Override
