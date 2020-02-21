@@ -18,7 +18,7 @@ package com.unimod.format.dds;
 
 import com.openitvn.unicore.world.resource.IPixelFormat;
 import com.openitvn.unicore.world.resource.ICubeMap;
-import com.openitvn.util.StringHelper;
+import com.openitvn.helper.StringHelper;
 import com.openitvn.unicore.data.DataStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

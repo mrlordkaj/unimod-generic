@@ -21,7 +21,7 @@ import com.openitvn.unicore.world.resource.IPixelFormat;
 import com.openitvn.unicore.world.resource.ICubeMap;
 import com.openitvn.unicore.world.resource.ITexture;
 import com.openitvn.unicore.data.DataStream;
-import com.openitvn.util.FileHelper;
+import com.openitvn.helper.FileHelper;
 import java.awt.Dimension;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
