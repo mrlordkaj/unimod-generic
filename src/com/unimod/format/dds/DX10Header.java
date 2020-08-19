@@ -25,6 +25,7 @@ import java.nio.ByteOrder;
  * @author Thinh Pham
  */
 public class DX10Header {
+    
     protected DX10PixelFormat dxgiFormat;
     protected DX10ResourceDimension resourceDimension;
     protected int miscFlag;

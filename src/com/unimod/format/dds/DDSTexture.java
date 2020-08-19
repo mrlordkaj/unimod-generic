@@ -16,9 +16,6 @@
  */
 package com.unimod.format.dds;
 
-import com.badlogic.gdx.graphics.GL20;
-import com.openitvn.unicore.world.resource.IPixelFormat;
-import com.openitvn.unicore.world.resource.ICubeMap;
 import com.openitvn.unicore.world.resource.ITexture;
 import com.openitvn.unicore.data.DataStream;
 import com.openitvn.helper.FileHelper;
@@ -34,23 +31,28 @@ public class DDSTexture extends ITexture {
     
     private DXHeader header; // common header
     private DX10Header headerDX10; // extended header for DX10
-    private byte[][][] imageBuffers; // byte[imageCount][mipmapCount][]
     
     public DDSTexture(DataStream ds) {
         // read header
         header = new DXHeader(ds);
-        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
+        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10) {
             headerDX10 = new DX10Header(ds);
-        int numFaces = getFaceCount();
-        int numMips = getMipCount();
-        IPixelFormat format = getPixelFormat();
+        }
+        numFaces = header.isCubeMap() ? header.getCubeMap().getFaceCount() : 1;
+        numMips = header.getMipMapCount();
+        format = (header.ddspf == DDSPixelFormat.D3DFMT_DX10) ?
+                headerDX10.dxgiFormat.format :
+                header.ddspf.format;
+        width = header.dwWidth;
+        height = header.dwHeight;
+        cubeMap = header.getCubeMap();
         
         // copy image buffers
         imageBuffers = new byte[numFaces][numMips][];
         for (int i = 0; i < numFaces; i++) {
             for (int j = 0; j < numMips; j++) {
-                Dimension imageSize = computeMipMapSize(header.dwWidth, header.dwHeight, j);
-                int bufferSize = format.computeImageBufferSize(imageSize);
+                Dimension imgSize = computeMipMapSize(width, height, j);
+                int bufferSize = format.computeImageBufferSize(imgSize);
                 imageBuffers[i][j] = new byte[bufferSize];
                 ds.get(imageBuffers[i][j]);
             }
@@ -78,7 +80,7 @@ public class DDSTexture extends ITexture {
         header.setCubeMap(src.getCubeMapHeader());
         // copy buffer from source
         int numFaces = src.getFaceCount();
-        int numMips = header.getMipMapCount();
+        int numMips = header.getMipMapCount(); // ???
         imageBuffers = new byte[numFaces][numMips][];
         for (int i = 0; i < numFaces; i++) {
             for (int j = 0; j < numMips; j++) {
@@ -87,12 +89,12 @@ public class DDSTexture extends ITexture {
         }
         
         // allocate file size
-        int imgCount = getFaceCount();
         int fileSize = header.dwSize + 4;
-        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
+        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10) {
             fileSize += 20;
-        for (int i = 0; i < imgCount; i++) {
-            for (int j = 0; j < header.getMipMapCount(); j++) {
+        }
+        for (int i = 0; i < numFaces; i++) {
+            for (int j = 0; j < numMips; j++) {
                 fileSize += imageBuffers[i][j].length;
             }
         }
@@ -100,66 +102,15 @@ public class DDSTexture extends ITexture {
         // writeTo header
         header.writeTo(bb);
         // writeTo DX10 extended header
-        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10)
+        if (header.ddspf == DDSPixelFormat.D3DFMT_DX10) {
             headerDX10.writeTo(bb);
+        }
         // writeTo image buffer
-        for (int i = 0; i < imgCount; i++) {
-            for (int j = 0; j < header.getMipMapCount(); j++) {
+        for (int i = 0; i < numFaces; i++) {
+            for (int j = 0; j < numMips; j++) {
                 bb.put(imageBuffers[i][j]);
             }
         }
         return bb.array();
-    }
-    
-    @Override
-    public byte[][] getPalette() {
-        return null;
-    }
-    
-    @Override
-    public byte[] getImageBuffer(int face, int mipLevel) {
-        return imageBuffers[face][mipLevel];
-    }
-    
-    @Override
-    public int getWidth() {
-        return header.dwWidth;
-    }
-
-    @Override
-    public int getHeight() {
-        return header.dwHeight;
-    }
-    
-    @Override
-    public final int getFaceCount() {
-        return header.isCubeMap() ? header.getCubeMap().getFaceCount() : 1;
-    }
-
-    @Override
-    public final int getMipCount() {
-        return header.getMipMapCount();
-    }
-    
-    @Override
-    public int getUWrap() {
-        return GL20.GL_CLAMP_TO_EDGE;
-    }
-
-    @Override
-    public int getVWrap() {
-        return GL20.GL_CLAMP_TO_EDGE;
-    }
-    
-    @Override
-    public ICubeMap getCubeMapHeader() {
-        return header.getCubeMap();
-    }
-    
-    @Override
-    public final IPixelFormat getPixelFormat() {
-        return (header.ddspf == DDSPixelFormat.D3DFMT_DX10) ?
-                headerDX10.dxgiFormat.format :
-                header.ddspf.format;
     }
 }

@@ -16,9 +16,7 @@
  */
 package com.unimod.format.images;
 
-import com.badlogic.gdx.graphics.GL20;
 import com.openitvn.unicore.data.DataStream;
-import com.openitvn.unicore.world.resource.ICubeMap;
 import com.openitvn.unicore.world.resource.IPixelFormat;
 import com.openitvn.unicore.world.resource.ITexture;
 import com.openitvn.helper.FileHelper;
@@ -35,22 +33,20 @@ import javax.imageio.ImageIO;
  */
 public class GenericImage extends ITexture {
     
-    private final int width, height;
-    private final byte[] imageBuffer;
-
     GenericImage(DataStream ds) throws IOException {
         super(FileHelper.getFileName(ds.getLastPath()));
         BufferedImage img = ImageIO.read(ds);
         width = img.getWidth();
         height = img.getHeight();
+        format = IPixelFormat.D3DFMT_A8B8G8R8;
         // make sure ABGR type
-        BufferedImage norImg = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+        BufferedImage norImg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         norImg.getGraphics().drawImage(img, 0, 0, null);
         byte[] tmp = ((DataBufferByte)norImg.getRaster().getDataBuffer()).getData();
         // build data
         int numPixels = width * height;
-        imageBuffer = new byte[numPixels * 4];
-        ByteBuffer rgba = ByteBuffer.wrap(imageBuffer).order(ByteOrder.LITTLE_ENDIAN);
+        imageBuffers = new byte[1][1][numPixels * 4];
+        ByteBuffer rgba = ByteBuffer.wrap(imageBuffers[0][0]).order(ByteOrder.LITTLE_ENDIAN);
         ByteBuffer abgr = ByteBuffer.wrap(tmp).order(ByteOrder.BIG_ENDIAN);
         for (int i = 0; i < numPixels; i++) {
             rgba.putInt(abgr.getInt());
@@ -60,55 +56,5 @@ public class GenericImage extends ITexture {
     @Override
     public byte[] compileTexture(ITexture srcImg) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public byte[][] getPalette() {
-        return null;
-    }
-
-    @Override
-    public byte[] getImageBuffer(int face, int mipLevel) {
-        return imageBuffer;
-    }
-    
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
-    }
-
-    @Override
-    public int getFaceCount() {
-        return 1;
-    }
-
-    @Override
-    public int getMipCount() {
-        return 1;
-    }
-    
-    @Override
-    public int getUWrap() {
-        return GL20.GL_CLAMP_TO_EDGE;
-    }
-
-    @Override
-    public int getVWrap() {
-        return GL20.GL_CLAMP_TO_EDGE;
-    }
-
-    @Override
-    public ICubeMap getCubeMapHeader() {
-        return null;
-    }
-
-    @Override
-    public IPixelFormat getPixelFormat() {
-        return IPixelFormat.D3DFMT_A8B8G8R8;
     }
 }
